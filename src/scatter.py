@@ -356,7 +356,7 @@ class ScatterUI(QtWidgets.QDialog):
 
 
 class Scatter(object):
-    
+
     def __init__(self):
         self.rot_min_x = 0
         self.rot_min_y = 0
@@ -370,6 +370,20 @@ class Scatter(object):
         self.scl_min_y = 0
         self.scl_min_z = 0
 
-        self.scl_max_x = 5
-        self.scl_max_y = 5
-        self.scl_max_z = 5
+        self.scl_max_x = 10
+        self.scl_max_y = 10
+        self.scl_max_z = 10
+
+    def scatter_obj(self):
+        """scatter the selected object"""
+        vert_list = cmds.ls(selection=True, fl=True)
+        scatter_grp = cmds.group(n='scatter_grp', a=False)
+        object_to_instance = vert_list[0]
+        if cmds.objectType(object_to_instance) == 'transform':
+            for vert in vert_list:
+                vertex_pos = cmds.xform(vert, q=True, ws=True, t=True)
+                new_instance = cmds.instance(object_to_instance, n='obj_inst')
+                cmds.move(vertex_pos[0], vertex_pos[1], vertex_pos[2],
+                          new_instance)
+        cmds.delete(vert_list[0])
+
