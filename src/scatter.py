@@ -14,7 +14,7 @@ def maya_main_window():
 
 
 class ScatterUI(QtWidgets.QDialog):
-    """Simple UI Class"""
+    """Create a UI Class"""
 
     def __init__(self):
         """Constructor"""
@@ -56,6 +56,22 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatter_rot_connections()
         self.scl_btn.clicked.connect(self.scatter_scale_object)
         self.scatter_scl_connections()
+
+    def scatter_scl_connections(self):
+        self.min_x_scl_sbx.valueChanged.connect(self.update_scl_min_x)
+        self.min_y_scl_sbx.valueChanged.connect(self.update_scl_min_y)
+        self.min_z_scl_sbx.valueChanged.connect(self.update_scl_min_z)
+        self.max_x_scl_sbx.valueChanged.connect(self.update_scl_max_x)
+        self.max_y_scl_sbx.valueChanged.connect(self.update_scl_max_y)
+        self.max_z_scl_sbx.valueChanged.connect(self.update_scl_max_z)
+
+    def scatter_rot_connections(self):
+        self.min_x_rot_sbx.valueChanged.connect(self.update_rot_min_x)
+        self.min_y_rot_sbx.valueChanged.connect(self.update_rot_min_y)
+        self.min_z_rot_sbx.valueChanged.connect(self.update_rot_min_z)
+        self.max_x_rot_sbx.valueChanged.connect(self.update_rot_max_x)
+        self.max_y_rot_sbx.valueChanged.connect(self.update_rot_max_y)
+        self.max_z_rot_sbx.valueChanged.connect(self.update_rot_max_z)
 
     def update_rot_min_x(self):
         self.scatterT.rot_min_x = self.min_x_rot_sbx.value()
@@ -107,5 +123,18 @@ class ScatterUI(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def cancel(self):
-        """Quits the dialog"""
+        """Quits the window"""
         self.close()
+
+    def cancel_lay_ui(self):
+        """scatter and cancel layout"""
+        self.scatter_btn = QtWidgets.QPushButton("Scatter Object")
+        self.scatter_btn.setStyleSheet("font: Bold 15px")
+        self.cancel_btn = QtWidgets.QPushButton("Cancel")
+        self.cancel_btn.setStyleSheet("font: Bold 13px")
+        self.scatter_btn.setFixedHeight(40)
+        self.cancel_btn.setFixedHeight(40)
+        layout = QtWidgets.QGridLayout()
+        layout.addWidget(self.scatter_btn, 0, 0)
+        layout.addWidget(self.cancel_btn, 0, 1)
+        return layout
