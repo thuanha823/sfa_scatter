@@ -56,3 +56,56 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatter_rot_connections()
         self.scl_btn.clicked.connect(self.scatter_scale_object)
         self.scatter_scl_connections()
+
+    def update_rot_min_x(self):
+        self.scatterT.rot_min_x = self.min_x_rot_sbx.value()
+
+    def update_rot_min_y(self):
+        self.scatterT.rot_min_y = self.min_y_rot_sbx.value()
+
+    def update_rot_min_z(self):
+        self.scatterT.rot_min_z = self.min_z_rot_sbx.value()
+
+    def update_rot_max_x(self):
+        self.scatterT.rot_max_x = self.max_x_rot_sbx.value()
+
+    def update_rot_max_y(self):
+        self.scatterT.rot_max_y = self.max_y_rot_sbx.value()
+
+    def update_rot_max_z(self):
+        self.scatterT.rot_max_z = self.max_z_rot_sbx.value()
+
+    def update_scl_min_x(self):
+        self.scatterT.scl_min_x = self.min_x_scl_sbx.value()
+
+    def update_scl_min_y(self):
+        self.scatterT.scl_min_y = self.min_y_scl_sbx.value()
+
+    def update_scl_min_z(self):
+        self.scatterT.scl_min_z = self.min_z_scl_sbx.value()
+
+    def update_scl_max_x(self):
+        self.scatterT.scl_max_x = self.max_x_scl_sbx.value()
+
+    def update_scl_max_y(self):
+        self.scatterT.scl_max_y = self.max_y_scl_sbx.value()
+
+    def update_scl_max_z(self):
+        self.scatterT.scl_max_z = self.max_z_scl_sbx.value()
+
+    @QtCore.Slot()
+    def scatter_object(self):
+        self.scatterT.scatter_obj()
+
+    @QtCore.Slot()
+    def scatter_rotate_object(self):
+        self.scatterT.scatter_rotate_obj()
+
+    @QtCore.Slot()
+    def scatter_scale_object(self):
+        self.scatterT.scatter_scale_obj()
+
+    @QtCore.Slot()
+    def cancel(self):
+        """Quits the dialog"""
+        self.close()
