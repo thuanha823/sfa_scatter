@@ -242,6 +242,134 @@ class ScatterUI(QtWidgets.QDialog):
         self.max_z_rot_sbx.setFixedHeight(25)
         self.max_z_rot_sbx.setValue(self.scatterT.rot_max_z)
 
+    def randomize_scale_ui(self):
+        """random scale layout"""
+        self.scl_btn = QtWidgets.QPushButton("Randomize Scale")
+        self.scl_btn.setStyleSheet("font: Bold 15px")
+        self.scl_btn.setMinimumHeight(50)
+        self.scale_x()
+        self.scale_y()
+        self.scale_z()
+
+        layout = QtWidgets.QGridLayout()
+        layout.addWidget(self.scl_btn, 1, 0)
+
+        layout.addWidget(self.sclX_lbl, 0, 1)
+        layout.addWidget(self.min_x_scl_sbx, 0, 2)
+        layout.addWidget(self.x_scl_space, 0, 3)
+        layout.addWidget(self.max_x_scl_sbx, 0, 4)
+
+        layout.addWidget(self.sclY_lbl, 1, 1)
+        layout.addWidget(self.min_y_scl_sbx, 1, 2)
+        layout.addWidget(self.y_scl_space, 1, 3)
+        layout.addWidget(self.max_y_scl_sbx, 1, 4)
+
+        layout.addWidget(self.sclZ_lbl, 2, 1)
+        layout.addWidget(self.min_z_scl_sbx, 2, 2)
+        layout.addWidget(self.z_scl_space, 2, 3)
+        layout.addWidget(self.max_z_scl_sbx, 2, 4)
+        return layout
+
+    def scale_x(self):
+        self.min_x_scl_sbx = QtWidgets.QDoubleSpinBox()
+        self.min_x_scl_sbx.setDecimals(1)
+        self.min_x_scl_sbx.setSingleStep(.1)
+        self.min_x_scl_sbx.setMaximum(10)
+        self.min_x_scl_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_x_scl_sbx.setFixedWidth(60)
+        self.min_x_scl_sbx.setFixedHeight(25)
+        self.min_x_scl_sbx.setValue(self.scatterT.scl_min_x)
+
+        self.sclX_lbl = QtWidgets.QLabel("X")
+        self.sclX_lbl.setFixedWidth(15)
+        self.sclX_lbl.setIndent(9)
+        self.x_scl_space = QtWidgets.QLabel("-")
+        self.x_scl_space.setFixedWidth(10)
+        self.x_scl_space.setStyleSheet("font: 20px")
+
+        self.max_x_scl_sbx = QtWidgets.QDoubleSpinBox()
+        self.max_x_scl_sbx.setDecimals(1)
+        self.max_x_scl_sbx.setSingleStep(.1)
+        self.max_x_scl_sbx.setMaximum(10)
+        self.max_x_scl_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_x_scl_sbx.setFixedWidth(60)
+        self.max_x_scl_sbx.setFixedHeight(25)
+        self.max_x_scl_sbx.setValue(self.scatterT.scl_max_x)
+
+    def scale_y(self):
+        self.min_y_scl_sbx = QtWidgets.QDoubleSpinBox()
+        self.min_y_scl_sbx.setDecimals(1)
+        self.min_y_scl_sbx.setSingleStep(.1)
+        self.min_y_scl_sbx.setMaximum(10)
+        self.min_y_scl_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_y_scl_sbx.setFixedWidth(60)
+        self.min_y_scl_sbx.setFixedHeight(25)
+        self.min_y_scl_sbx.setValue(self.scatterT.scl_min_y)
+
+        self.sclY_lbl = QtWidgets.QLabel("Y")
+        self.sclY_lbl.setFixedWidth(15)
+        self.sclY_lbl.setIndent(9)
+        self.y_scl_space = QtWidgets.QLabel("-")
+        self.y_scl_space.setFixedWidth(10)
+        self.y_scl_space.setStyleSheet("font: 20px")
+
+        self.max_y_scl_sbx = QtWidgets.QDoubleSpinBox()
+        self.max_y_scl_sbx.setDecimals(1)
+        self.max_y_scl_sbx.setSingleStep(.1)
+        self.max_y_scl_sbx.setMaximum(10)
+        self.max_y_scl_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_y_scl_sbx.setFixedWidth(60)
+        self.max_y_scl_sbx.setFixedHeight(25)
+        self.max_y_scl_sbx.setValue(self.scatterT.scl_max_y)
+
+    def scale_z(self):
+        self.min_z_scl_sbx = QtWidgets.QDoubleSpinBox()
+        self.min_z_scl_sbx.setDecimals(1)
+        self.min_z_scl_sbx.setSingleStep(.1)
+        self.min_z_scl_sbx.setMaximum(10)
+        self.min_z_scl_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_z_scl_sbx.setFixedWidth(60)
+        self.min_z_scl_sbx.setFixedHeight(25)
+        self.min_z_scl_sbx.setValue(self.scatterT.scl_min_z)
+
+        self.sclZ_lbl = QtWidgets.QLabel("Z")
+        self.sclZ_lbl.setFixedWidth(15)
+        self.sclZ_lbl.setIndent(9)
+        self.z_scl_space = QtWidgets.QLabel("-")
+        self.z_scl_space.setFixedWidth(10)
+        self.z_scl_space.setStyleSheet("font: 20px")
+
+        self.max_z_scl_sbx = QtWidgets.QDoubleSpinBox()
+        self.max_z_scl_sbx.setDecimals(1)
+        self.max_z_scl_sbx.setSingleStep(.1)
+        self.max_z_scl_sbx.setMaximum(10)
+        self.max_z_scl_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_z_scl_sbx.setFixedWidth(60)
+        self.max_z_scl_sbx.setFixedHeight(25)
+        self.max_z_scl_sbx.setValue(self.scatterT.scl_max_z)
+
 
 class Scatter(object):
-    pass
+    
+    def __init__(self):
+        self.rot_min_x = 0
+        self.rot_min_y = 0
+        self.rot_min_z = 0
+
+        self.rot_max_x = 360
+        self.rot_max_y = 360
+        self.rot_max_z = 360
+
+        self.scl_min_x = 0
+        self.scl_min_y = 0
+        self.scl_min_z = 0
+
+        self.scl_max_x = 5
+        self.scl_max_y = 5
+        self.scl_max_z = 5
