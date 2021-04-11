@@ -24,6 +24,9 @@ class ScatterUI(QtWidgets.QDialog):
         self.setFixedHeight(475)
         self.setWindowFlags(self.windowFlags() ^
                             QtCore.Qt.WindowContextHelpButtonHint)
+        self.scatterT = Scatter()
+        self.create_ui()
+        self.create_connections()
 
     def create_ui(self):
         self.title_lbl = QtWidgets.QLabel("Scatter Tool")
@@ -138,3 +141,107 @@ class ScatterUI(QtWidgets.QDialog):
         layout.addWidget(self.scatter_btn, 0, 0)
         layout.addWidget(self.cancel_btn, 0, 1)
         return layout
+
+    def randomize_rotate_ui(self):
+        """Random rotation layout"""
+        self.rot_btn = QtWidgets.QPushButton("Randomize Rotation Offset")
+        self.rot_btn.setStyleSheet("font: Bold 15px")
+        self.rot_btn.setMinimumHeight(50)
+        self.rotate_x()
+        self.rotate_y()
+        self.rotate_z()
+
+        layout = QtWidgets.QGridLayout()
+        layout.addWidget(self.rot_btn, 1, 0)
+
+        layout.addWidget(self.rotX_lbl, 0, 1)
+        layout.addWidget(self.min_x_rot_sbx, 0, 2)
+        layout.addWidget(self.x_rot_space, 0, 3)
+        layout.addWidget(self.max_x_rot_sbx, 0, 4)
+
+        layout.addWidget(self.rotY_lbl, 1, 1)
+        layout.addWidget(self.min_y_rot_sbx, 1, 2)
+        layout.addWidget(self.y_rot_space, 1, 3)
+        layout.addWidget(self.max_y_rot_sbx, 1, 4)
+
+        layout.addWidget(self.rotZ_lbl, 2, 1)
+        layout.addWidget(self.min_z_rot_sbx, 2, 2)
+        layout.addWidget(self.z_rot_space, 2, 3)
+        layout.addWidget(self.max_z_rot_sbx, 2, 4)
+        return layout
+
+    def rotate_x(self):
+        self.min_x_rot_sbx = QtWidgets.QSpinBox()
+        self.min_x_rot_sbx.setMaximum(360)
+        self.min_x_rot_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_x_rot_sbx.setFixedWidth(60)
+        self.min_x_rot_sbx.setFixedHeight(25)
+        self.min_x_rot_sbx.setValue(self.scatterT.rot_min_x)
+
+        self.rotX_lbl = QtWidgets.QLabel("X")
+        self.rotX_lbl.setFixedWidth(15)
+        self.rotX_lbl.setIndent(9)
+        self.x_rot_space = QtWidgets.QLabel("-")
+        self.x_rot_space.setFixedWidth(10)
+        self.x_rot_space.setStyleSheet("font: 20px")
+
+        self.max_x_rot_sbx = QtWidgets.QSpinBox()
+        self.max_x_rot_sbx.setMaximum(360)
+        self.max_x_rot_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_x_rot_sbx.setFixedWidth(60)
+        self.max_x_rot_sbx.setFixedHeight(25)
+        self.max_x_rot_sbx.setValue(self.scatterT.rot_max_x)
+
+    def rotate_y(self):
+        self.min_y_rot_sbx = QtWidgets.QSpinBox()
+        self.min_y_rot_sbx.setMaximum(360)
+        self.min_y_rot_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_y_rot_sbx.setFixedWidth(60)
+        self.min_y_rot_sbx.setFixedHeight(25)
+        self.min_y_rot_sbx.setValue(self.scatterT.rot_min_y)
+
+        self.rotY_lbl = QtWidgets.QLabel("Y")
+        self.rotY_lbl.setFixedWidth(15)
+        self.rotY_lbl.setIndent(9)
+        self.y_rot_space = QtWidgets.QLabel("-")
+        self.y_rot_space.setFixedWidth(10)
+        self.y_rot_space.setStyleSheet("font: 20px")
+
+        self.max_y_rot_sbx = QtWidgets.QSpinBox()
+        self.max_y_rot_sbx.setMaximum(360)
+        self.max_y_rot_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_y_rot_sbx.setFixedWidth(60)
+        self.max_y_rot_sbx.setFixedHeight(25)
+        self.max_y_rot_sbx.setValue(self.scatterT.rot_max_y)
+
+    def rotate_z(self):
+        self.min_z_rot_sbx = QtWidgets.QSpinBox()
+        self.min_z_rot_sbx.setMaximum(360)
+        self.min_z_rot_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_z_rot_sbx.setFixedWidth(60)
+        self.min_z_rot_sbx.setFixedHeight(25)
+        self.min_z_rot_sbx.setValue(self.scatterT.rot_min_z)
+
+        self.rotZ_lbl = QtWidgets.QLabel("Z")
+        self.rotZ_lbl.setFixedWidth(15)
+        self.rotZ_lbl.setIndent(9)
+        self.z_rot_space = QtWidgets.QLabel("-")
+        self.z_rot_space.setFixedWidth(10)
+        self.z_rot_space.setStyleSheet("font: 20px")
+
+        self.max_z_rot_sbx = QtWidgets.QSpinBox()
+        self.max_z_rot_sbx.setMaximum(360)
+        self.max_z_rot_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_z_rot_sbx.setFixedWidth(60)
+        self.max_z_rot_sbx.setFixedHeight(25)
+        self.max_z_rot_sbx.setValue(self.scatterT.rot_max_z)
+
+
+class Scatter(object):
+    pass
