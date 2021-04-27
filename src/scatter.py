@@ -20,8 +20,8 @@ class ScatterUI(QtWidgets.QDialog):
         """Constructor"""
         super(ScatterUI, self).__init__(parent=maya_main_window())
         self.setWindowTitle("Scatter Tool Window")
-        self.setFixedWidth(470)
-        self.setFixedHeight(520)
+        #self.setFixedWidth(470)
+        #self.setFixedHeight(600)
         self.setWindowFlags(self.windowFlags() ^
                             QtCore.Qt.WindowContextHelpButtonHint)
         self.scatterT = Scatter()
@@ -45,9 +45,16 @@ class ScatterUI(QtWidgets.QDialog):
             "Set min/max value from 0 to 360 for randomize rotation")
         self.scatter_note_rot_lbl.setStyleSheet("font: Bold 12px")
 
+        self.scatter_density_lbl = QtWidgets.QLabel("Scatter Density")
+        self.scatter_density_lbl.setStyleSheet("font: Bold 20px")
+        self.scatter_note_density_lbl = QtWidgets.QLabel(
+            "Set percentage to scatter")
+        self.scatter_note_density_lbl.setStyleSheet("font: Bold 12px")
+
         self.sct_cnl_lay = self.cancel_lay_ui()
         self.rnd_rotation_lay = self.randomize_rotate_ui()
         self.rnd_scale_lay = self.randomize_scale_ui()
+        self.density_lay = self.density_val_ui()
         self.main_layout_ui()
 
     def main_layout_ui(self):
@@ -62,6 +69,10 @@ class ScatterUI(QtWidgets.QDialog):
         self.main_lay.addWidget(self.scatter_note_rot_lbl)
         self.main_lay.addLayout(self.rnd_rotation_lay)
 
+        self.main_lay.addWidget(self.scatter_density_lbl)
+        self.main_lay.addWidget(self.scatter_note_density_lbl)
+        self.main_lay.addLayout(self.density_lay)
+
         self.main_lay.addStretch()
         self.main_lay.addLayout(self.sct_cnl_lay)
         self.setLayout(self.main_lay)
@@ -73,6 +84,8 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatter_rot_connections()
         self.scl_btn.clicked.connect(self.scatter_scale_object)
         self.scatter_scl_connections()
+
+        self.scatter_density_connections()
 
     def scatter_scl_connections(self):
         self.min_x_scl_sbx.valueChanged.connect(self.update_scl_min_x)
@@ -89,6 +102,9 @@ class ScatterUI(QtWidgets.QDialog):
         self.max_x_rot_sbx.valueChanged.connect(self.update_rot_max_x)
         self.max_y_rot_sbx.valueChanged.connect(self.update_rot_max_y)
         self.max_z_rot_sbx.valueChanged.connect(self.update_rot_max_z)
+
+    def scatter_density_connections(self):
+        self.density_val_sbx.valueChanged.connect(self.update_density_value)
 
     def update_rot_min_x(self):
         self.scatterT.rot_min_x = self.min_x_rot_sbx.value()
@@ -126,6 +142,9 @@ class ScatterUI(QtWidgets.QDialog):
     def update_scl_max_z(self):
         self.scatterT.scl_max_z = self.max_z_scl_sbx.value()
 
+    def update_density_value(self):
+        self.scatterT.density_value = self.density_val_sbx.value()
+
     @QtCore.Slot()
     def scatter_object(self):
         self.scatterT.scatter_obj()
@@ -137,6 +156,10 @@ class ScatterUI(QtWidgets.QDialog):
     @QtCore.Slot()
     def scatter_scale_object(self):
         self.scatterT.scatter_scale_obj()
+
+    @QtCore.Slot()
+    def scatter_density_object(self):
+        self.scatterT.scatter_density_obj()
 
     @QtCore.Slot()
     def cancel(self):
@@ -374,6 +397,37 @@ class ScatterUI(QtWidgets.QDialog):
         self.max_z_scl_sbx.setFixedHeight(25)
         self.max_z_scl_sbx.setValue(self.scatterT.scl_max_z)
 
+    def density_val_ui(self):
+        """Specify density value to scatter"""
+        self.density_lbl = QtWidgets.QPushButton("Density Percentage")
+        self.density_val_sbx = QtWidgets.QDoubleSpinBox()
+
+        self.density_val_sbx.setDecimals(1)
+        self.density_val_sbx.setSingleStep(1)
+        self.density_val_sbx.setMaximum(100)
+        self.density_val_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+
+        self.density_val_sbx.setFixedWidth(75)
+        self.density_val_sbx.setFixedHeight(40)
+        self.density_val_sbx.setValue(self.scatterT.density_value)
+
+        self.density_lbl = QtWidgets.QLabel("Value")
+        self.density_lbl.setStyleSheet("font: Bold, 15px")
+        self.density_lbl.setIndent(9)
+
+        self.dens_val_space = QtWidgets.QLabel("")
+        #self.dens_val_space.setFixedWidth(10)
+        self.dens_val_space.setStyleSheet("font: 20px")
+
+        layout = QtWidgets.QGridLayout()
+
+        layout.addWidget(self.dens_val_space, 0, 0)
+        layout.addWidget(self.density_lbl, 1, 0)
+        layout.addWidget(self.density_val_sbx, 1, 1)
+
+        return layout
+
 
 class Scatter(object):
 
@@ -393,6 +447,8 @@ class Scatter(object):
         self.scl_max_x = 5
         self.scl_max_y = 5
         self.scl_max_z = 5
+
+        self.density_value = 100
 
     def scatter_obj(self):
         """scatter the selected object"""
