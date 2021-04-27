@@ -104,7 +104,8 @@ class ScatterUI(QtWidgets.QDialog):
         self.max_z_rot_sbx.valueChanged.connect(self.update_rot_max_z)
 
     def scatter_density_connections(self):
-        self.density_val_sbx.valueChanged.connect(self.update_density_value)
+        self.density_val_sbx.valueChanged.connect(
+            self.update_density_value)
 
     def update_rot_min_x(self):
         self.scatterT.rot_min_x = self.min_x_rot_sbx.value()
@@ -143,7 +144,7 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatterT.scl_max_z = self.max_z_scl_sbx.value()
 
     def update_density_value(self):
-        self.scatterT.density_value = self.density_val_sbx.value()
+        self.scatterT.density_value = (self.density_val_sbx.value() / 100)
 
     @QtCore.Slot()
     def scatter_object(self):
@@ -402,7 +403,7 @@ class ScatterUI(QtWidgets.QDialog):
         self.density_lbl = QtWidgets.QPushButton("Density Percentage")
         self.density_val_sbx = QtWidgets.QDoubleSpinBox()
 
-        self.density_val_sbx.setDecimals(1)
+        self.density_val_sbx.setDecimals(0)
         self.density_val_sbx.setSingleStep(1)
         self.density_val_sbx.setMaximum(100)
         self.density_val_sbx.setButtonSymbols(
@@ -416,11 +417,10 @@ class ScatterUI(QtWidgets.QDialog):
         self.density_lbl.setStyleSheet("font: Bold, 15px")
         self.density_lbl.setIndent(9)
 
-        self.dens_val_space = QtWidgets.QLabel("")
-        #self.dens_val_space.setFixedWidth(10)
-        self.dens_val_space.setStyleSheet("font: 20px")
+        self.dens_val_space = QtWidgets.QLabel(" ")
+        self.dens_val_space.setStyleSheet("font: 5px")
 
-        layout = QtWidgets.QGridLayout()
+        layout = QtWidgets.QVBoxLayout()
 
         layout.addWidget(self.dens_val_space, 0, 0)
         layout.addWidget(self.density_lbl, 1, 0)
@@ -453,10 +453,13 @@ class Scatter(object):
     def scatter_obj(self):
         """scatter the selected object"""
         vert_list = cmds.ls(selection=True, fl=True)
+        den_list = random.sample(vert_list,
+                                 int(round(float(len(vert_list)
+                                                 * self.density_value))))
         scatter_grp = cmds.group(n='scatter_grp', a=False)
         object_to_instance = vert_list[0]
         if cmds.objectType(object_to_instance) == 'transform':
-            for vert in vert_list:
+            for vert in den_list:
                 vertex_pos = cmds.xform(vert, q=True, ws=True, t=True)
                 new_instance = cmds.instance(object_to_instance, n='obj_inst')
                 cmds.move(vertex_pos[0], vertex_pos[1], vertex_pos[2],
