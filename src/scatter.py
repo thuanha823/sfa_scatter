@@ -20,11 +20,11 @@ class ScatterUI(QtWidgets.QDialog):
         """Constructor"""
         super(ScatterUI, self).__init__(parent=maya_main_window())
         self.setWindowTitle("Scatter Tool Window")
-        self.setFixedWidth(500)
-        self.setFixedHeight(780)
+        self.setFixedWidth(575)
+        self.setFixedHeight(790)
         self.setWindowFlags(self.windowFlags() ^
                             QtCore.Qt.WindowContextHelpButtonHint)
-        self.scatterT = Scatter()
+        self.scatter_tool = Scatter()
         self.create_ui()
         self.create_connections()
 
@@ -39,16 +39,16 @@ class ScatterUI(QtWidgets.QDialog):
             "Set min/max value from 0 to 5.0 for randomize rotation")
         self.scatter_note_scl_lbl.setStyleSheet("font: Bold 12px")
 
-        self.scatter_rot_lbl = QtWidgets.QLabel("Scatter Rotation Offset")
+        self.scatter_rot_lbl = QtWidgets.QLabel("Scatter Rotation")
         self.scatter_rot_lbl.setStyleSheet("font: Bold 20px")
         self.scatter_note_rot_lbl = QtWidgets.QLabel(
             "Set min/max value from 0 to 360 for randomize rotation")
         self.scatter_note_rot_lbl.setStyleSheet("font: Bold 12px")
 
-        self.scatter_height_lbl = QtWidgets.QLabel("Scatter Height Offset")
+        self.scatter_height_lbl = QtWidgets.QLabel("Scatter Height")
         self.scatter_height_lbl.setStyleSheet("font: Bold 20px")
         self.scatter_note_height_lbl = QtWidgets.QLabel(
-            "Set min/max height offset value")
+            "Set min/max value to randomize height offset")
         self.scatter_note_height_lbl.setStyleSheet("font: Bold 12px")
 
         self.scatter_density_lbl = QtWidgets.QLabel("Scatter Density")
@@ -96,6 +96,7 @@ class ScatterUI(QtWidgets.QDialog):
         self.scl_btn.clicked.connect(self.scatter_scale_object)
         self.scatter_scl_connections()
         self.scatter_height_connections()
+        self.height_btn.clicked.connect(self.scatter_height_object)
         self.scatter_density_connections()
 
     def scatter_scl_connections(self):
@@ -116,78 +117,80 @@ class ScatterUI(QtWidgets.QDialog):
 
     def scatter_height_connections(self):
         self.min_height_val_sbx.valueChanged.connect(
-            self.update_min_height_value)
+                                            self.update_min_height_value)
         self.max_height_val_sbx.valueChanged.connect(
-            self.update_max_height_value)
+                                            self.update_max_height_value)
 
     def scatter_density_connections(self):
         self.density_val_sbx.valueChanged.connect(
             self.update_density_value)
 
     def update_rot_min_x(self):
-        self.scatterT.rot_min_x = self.min_x_rot_sbx.value()
+        self.scatter_tool.rot_min_x = self.min_x_rot_sbx.value()
 
     def update_rot_min_y(self):
-        self.scatterT.rot_min_y = self.min_y_rot_sbx.value()
+        self.scatter_tool.rot_min_y = self.min_y_rot_sbx.value()
 
     def update_rot_min_z(self):
-        self.scatterT.rot_min_z = self.min_z_rot_sbx.value()
+        self.scatter_tool.rot_min_z = self.min_z_rot_sbx.value()
 
     def update_rot_max_x(self):
-        self.scatterT.rot_max_x = self.max_x_rot_sbx.value()
+        self.scatter_tool.rot_max_x = self.max_x_rot_sbx.value()
 
     def update_rot_max_y(self):
-        self.scatterT.rot_max_y = self.max_y_rot_sbx.value()
+        self.scatter_tool.rot_max_y = self.max_y_rot_sbx.value()
 
     def update_rot_max_z(self):
-        self.scatterT.rot_max_z = self.max_z_rot_sbx.value()
+        self.scatter_tool.rot_max_z = self.max_z_rot_sbx.value()
 
     def update_scl_min_x(self):
-        self.scatterT.scl_min_x = self.min_x_scl_sbx.value()
+        self.scatter_tool.scl_min_x = self.min_x_scl_sbx.value()
 
     def update_scl_min_y(self):
-        self.scatterT.scl_min_y = self.min_y_scl_sbx.value()
+        self.scatter_tool.scl_min_y = self.min_y_scl_sbx.value()
 
     def update_scl_min_z(self):
-        self.scatterT.scl_min_z = self.min_z_scl_sbx.value()
+        self.scatter_tool.scl_min_z = self.min_z_scl_sbx.value()
 
     def update_scl_max_x(self):
-        self.scatterT.scl_max_x = self.max_x_scl_sbx.value()
+        self.scatter_tool.scl_max_x = self.max_x_scl_sbx.value()
 
     def update_scl_max_y(self):
-        self.scatterT.scl_max_y = self.max_y_scl_sbx.value()
+        self.scatter_tool.scl_max_y = self.max_y_scl_sbx.value()
 
     def update_scl_max_z(self):
-        self.scatterT.scl_max_z = self.max_z_scl_sbx.value()
+        self.scatter_tool.scl_max_z = self.max_z_scl_sbx.value()
 
     def update_min_height_value(self):
-        self.scatterT.min_height_value = self.min_height_val_sbx.value()
+        self.scatter_tool.min_height_value = self.min_height_val_sbx.value()
 
     def update_max_height_value(self):
-        self.scatterT.max_height_value = self.max_height_val_sbx.value()
+        self.scatter_tool.max_height_value = self.max_height_val_sbx.value()
 
     def update_density_value(self):
-        self.scatterT.density_value = (self.density_val_sbx.value() / 100)
+        self.scatter_tool.density_value = (self.density_val_sbx.value() / 100)
 
     @QtCore.Slot()
     def scatter_object(self):
-        self.scatterT.scatter_obj()
+        self.scatter_tool.scatter_obj()
 
     @QtCore.Slot()
     def scatter_rotate_object(self):
-        self.scatterT.scatter_rotate_obj()
+        self.scatter_tool.scatter_rotate_obj()
 
     @QtCore.Slot()
     def scatter_scale_object(self):
-        self.scatterT.scatter_scale_obj()
+        self.scatter_tool.scatter_scale_obj()
 
     @QtCore.Slot()
     def scatter_height_object(self):
-        self.scatterT.scatter_height_obj()
+        self.scatter_tool.min_height_value = self.min_height_val_sbx.value()
+        self.scatter_tool.max_height_value = self.max_height_val_sbx.value()
+        self.scatter_tool.scatter_height_obj()
 
     @QtCore.Slot()
     def scatter_density_object(self):
-        self.scatterT.scatter_density_obj()
+        self.scatter_tool.scatter_density_obj()
 
     @QtCore.Slot()
     def cancel(self):
@@ -243,7 +246,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_x_rot_sbx.setFixedWidth(60)
         self.min_x_rot_sbx.setFixedHeight(25)
-        self.min_x_rot_sbx.setValue(self.scatterT.rot_min_x)
+        self.min_x_rot_sbx.setValue(self.scatter_tool.rot_min_x)
 
         self.rotX_lbl = QtWidgets.QLabel("X")
         self.rotX_lbl.setFixedWidth(15)
@@ -259,7 +262,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_x_rot_sbx.setFixedWidth(60)
         self.max_x_rot_sbx.setFixedHeight(25)
-        self.max_x_rot_sbx.setValue(self.scatterT.rot_max_x)
+        self.max_x_rot_sbx.setValue(self.scatter_tool.rot_max_x)
 
     def rotate_y(self):
         self.min_y_rot_sbx = QtWidgets.QSpinBox()
@@ -269,7 +272,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_y_rot_sbx.setFixedWidth(60)
         self.min_y_rot_sbx.setFixedHeight(25)
-        self.min_y_rot_sbx.setValue(self.scatterT.rot_min_y)
+        self.min_y_rot_sbx.setValue(self.scatter_tool.rot_min_y)
 
         self.rotY_lbl = QtWidgets.QLabel("Y")
         self.rotY_lbl.setFixedWidth(15)
@@ -285,7 +288,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_y_rot_sbx.setFixedWidth(60)
         self.max_y_rot_sbx.setFixedHeight(25)
-        self.max_y_rot_sbx.setValue(self.scatterT.rot_max_y)
+        self.max_y_rot_sbx.setValue(self.scatter_tool.rot_max_y)
 
     def rotate_z(self):
         self.min_z_rot_sbx = QtWidgets.QSpinBox()
@@ -295,7 +298,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_z_rot_sbx.setFixedWidth(60)
         self.min_z_rot_sbx.setFixedHeight(25)
-        self.min_z_rot_sbx.setValue(self.scatterT.rot_min_z)
+        self.min_z_rot_sbx.setValue(self.scatter_tool.rot_min_z)
 
         self.rotZ_lbl = QtWidgets.QLabel("Z")
         self.rotZ_lbl.setFixedWidth(15)
@@ -311,7 +314,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_z_rot_sbx.setFixedWidth(60)
         self.max_z_rot_sbx.setFixedHeight(25)
-        self.max_z_rot_sbx.setValue(self.scatterT.rot_max_z)
+        self.max_z_rot_sbx.setValue(self.scatter_tool.rot_max_z)
 
     def randomize_scale_ui(self):
         """random scale layout"""
@@ -350,7 +353,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_x_scl_sbx.setFixedWidth(60)
         self.min_x_scl_sbx.setFixedHeight(25)
-        self.min_x_scl_sbx.setValue(self.scatterT.scl_min_x)
+        self.min_x_scl_sbx.setValue(self.scatter_tool.scl_min_x)
 
         self.sclX_lbl = QtWidgets.QLabel("X")
         self.sclX_lbl.setFixedWidth(15)
@@ -367,7 +370,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_x_scl_sbx.setFixedWidth(60)
         self.max_x_scl_sbx.setFixedHeight(25)
-        self.max_x_scl_sbx.setValue(self.scatterT.scl_max_x)
+        self.max_x_scl_sbx.setValue(self.scatter_tool.scl_max_x)
 
     def scale_y(self):
         self.min_y_scl_sbx = QtWidgets.QDoubleSpinBox()
@@ -378,7 +381,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_y_scl_sbx.setFixedWidth(60)
         self.min_y_scl_sbx.setFixedHeight(25)
-        self.min_y_scl_sbx.setValue(self.scatterT.scl_min_y)
+        self.min_y_scl_sbx.setValue(self.scatter_tool.scl_min_y)
 
         self.sclY_lbl = QtWidgets.QLabel("Y")
         self.sclY_lbl.setFixedWidth(15)
@@ -395,7 +398,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_y_scl_sbx.setFixedWidth(60)
         self.max_y_scl_sbx.setFixedHeight(25)
-        self.max_y_scl_sbx.setValue(self.scatterT.scl_max_y)
+        self.max_y_scl_sbx.setValue(self.scatter_tool.scl_max_y)
 
     def scale_z(self):
         self.min_z_scl_sbx = QtWidgets.QDoubleSpinBox()
@@ -406,7 +409,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_z_scl_sbx.setFixedWidth(60)
         self.min_z_scl_sbx.setFixedHeight(25)
-        self.min_z_scl_sbx.setValue(self.scatterT.scl_min_z)
+        self.min_z_scl_sbx.setValue(self.scatter_tool.scl_min_z)
 
         self.sclZ_lbl = QtWidgets.QLabel("Z")
         self.sclZ_lbl.setFixedWidth(15)
@@ -423,24 +426,30 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_z_scl_sbx.setFixedWidth(60)
         self.max_z_scl_sbx.setFixedHeight(25)
-        self.max_z_scl_sbx.setValue(self.scatterT.scl_max_z)
+        self.max_z_scl_sbx.setValue(self.scatter_tool.scl_max_z)
 
     def height_val_ui(self):
         self.height_lbl = QtWidgets.QPushButton("Height offset")
         self.height_value()
+        self.height_btn = QtWidgets.QPushButton("Height Offset")
+        self.height_btn.setStyleSheet("font: Bold 14px")
+        self.height_btn.setFixedWidth(120)
+        self.height_btn.setFixedHeight(40)
 
         layout = QtWidgets.QGridLayout()
 
         layout.addWidget(self.min_height_space, 0, 0)
-        layout.addWidget(self.min_height_space, 1, 0)
-        layout.addWidget(self.min_height_lbl, 1, 1)
-        layout.addWidget(self.min_height_val_sbx, 1, 2)
-        layout.addWidget(self.min_height_space, 1, 3)
+        layout.addWidget(self.height_btn, 1, 0)
+        layout.addWidget(self.min_height_space, 1, 1)
+        layout.addWidget(self.min_height_lbl, 1, 2)
+        layout.addWidget(self.min_height_val_sbx, 1, 3)
+        layout.addWidget(self.min_height_space, 1, 4)
 
-        layout.addWidget(self.max_height_lbl, 1, 4)
-        layout.addWidget(self.max_height_val_sbx, 1, 5)
-        layout.addWidget(self.min_height_space, 1, 6)
-        layout.addWidget(self.min_height_space, 2, 0)
+        layout.addWidget(self.max_height_lbl, 1, 5)
+        layout.addWidget(self.max_height_val_sbx, 1, 6)
+        layout.addWidget(self.min_height_space, 1, 7)
+        layout.addWidget(self.min_height_space, 2, 8)
+
         return layout
 
     def height_value(self):
@@ -451,7 +460,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.min_height_val_sbx.setFixedWidth(70)
         self.min_height_val_sbx.setFixedHeight(30)
-        self.min_height_val_sbx.setValue(self.scatterT.min_height_value)
+        self.min_height_val_sbx.setValue(self.scatter_tool.min_height_value)
 
         self.min_height_lbl = QtWidgets.QLabel("Min:")
         self.min_height_lbl.setStyleSheet("font: Bold 13px")
@@ -464,7 +473,7 @@ class ScatterUI(QtWidgets.QDialog):
             QtWidgets.QAbstractSpinBox.PlusMinus)
         self.max_height_val_sbx.setFixedWidth(70)
         self.max_height_val_sbx.setFixedHeight(30)
-        self.max_height_val_sbx.setValue(self.scatterT.max_height_value)
+        self.max_height_val_sbx.setValue(self.scatter_tool.max_height_value)
 
         self.max_height_lbl = QtWidgets.QLabel("Max:")
         self.max_height_lbl.setStyleSheet("font: Bold 13px")
@@ -488,7 +497,7 @@ class ScatterUI(QtWidgets.QDialog):
 
         self.density_val_sbx.setFixedWidth(75)
         self.density_val_sbx.setFixedHeight(40)
-        self.density_val_sbx.setValue(self.scatterT.density_value)
+        self.density_val_sbx.setValue(self.scatter_tool.density_value)
 
         self.density_lbl = QtWidgets.QLabel("Value (%)")
         self.density_lbl.setStyleSheet("font: Bold, 15px")
@@ -547,6 +556,7 @@ class Scatter(object):
                 new_instance = cmds.instance(object_to_instance, n='obj_inst')
                 cmds.move(vertex_pos[0], vertex_pos[1], vertex_pos[2],
                           new_instance)
+
         cmds.delete(vert_list[0])
 
     def scatter_rotate_obj(self):
@@ -578,3 +588,12 @@ class Scatter(object):
                        rand_scl_y,
                        rand_scl_z,
                        obj, relative=True)
+
+    def scatter_height_obj(self):
+        """Scatter the object with ramdomize height relative to normal"""
+        obj_list = cmds.ls(selection=True)
+        for obj in obj_list:
+            rnd_height = random.uniform(self.min_height_value,
+                                         self.max_height_value)
+            cmds.xform(obj, translation=[0.0, rnd_height, 0.0],
+                       objectSpace=True, relative=True)
