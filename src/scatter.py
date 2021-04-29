@@ -20,8 +20,8 @@ class ScatterUI(QtWidgets.QDialog):
         """Constructor"""
         super(ScatterUI, self).__init__(parent=maya_main_window())
         self.setWindowTitle("Scatter Tool Window")
-        #self.setFixedWidth(470)
-        #self.setFixedHeight(600)
+        self.setFixedWidth(500)
+        self.setFixedHeight(780)
         self.setWindowFlags(self.windowFlags() ^
                             QtCore.Qt.WindowContextHelpButtonHint)
         self.scatterT = Scatter()
@@ -49,7 +49,7 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatter_height_lbl.setStyleSheet("font: Bold 20px")
         self.scatter_note_height_lbl = QtWidgets.QLabel(
             "Set min/max height offset value")
-        self.scatter_note_height_lbl.setStyleSheet("font: Bold 20px")
+        self.scatter_note_height_lbl.setStyleSheet("font: Bold 12px")
 
         self.scatter_density_lbl = QtWidgets.QLabel("Scatter Density")
         self.scatter_density_lbl.setStyleSheet("font: Bold 20px")
@@ -431,19 +431,49 @@ class ScatterUI(QtWidgets.QDialog):
 
         layout = QtWidgets.QGridLayout()
 
-        layout.addWidget(self.min_height_lbl, 0, 0)
-        layout.addWidget(self.min_height_val_sbx, 0, 1)
-        layout.addWidget(self.max_height_lbl, 0, 2)
-        layout.addWidget(self.max_height_val_sbx, 0, 3)
+        layout.addWidget(self.min_height_space, 0, 0)
+        layout.addWidget(self.min_height_space, 1, 0)
+        layout.addWidget(self.min_height_lbl, 1, 1)
+        layout.addWidget(self.min_height_val_sbx, 1, 2)
+        layout.addWidget(self.min_height_space, 1, 3)
 
+        layout.addWidget(self.max_height_lbl, 1, 4)
+        layout.addWidget(self.max_height_val_sbx, 1, 5)
+        layout.addWidget(self.min_height_space, 1, 6)
+        layout.addWidget(self.min_height_space, 2, 0)
         return layout
 
     def height_value(self):
         self.min_height_val_sbx = QtWidgets.QDoubleSpinBox()
-        self.min_height_lbl = QtWidgets.QLabel("Min")
+        self.min_height_val_sbx.setDecimals(1)
+        self.min_height_val_sbx.setSingleStep(.1)
+        self.min_height_val_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.min_height_val_sbx.setFixedWidth(70)
+        self.min_height_val_sbx.setFixedHeight(30)
+        self.min_height_val_sbx.setValue(self.scatterT.min_height_value)
+
+        self.min_height_lbl = QtWidgets.QLabel("Min:")
+        self.min_height_lbl.setStyleSheet("font: Bold 13px")
+        self.min_height_lbl.setFixedWidth(35)
 
         self.max_height_val_sbx = QtWidgets.QDoubleSpinBox()
-        self.max_height_lbl = QtWidgets.QLabel("Max")
+        self.max_height_val_sbx.setDecimals(1)
+        self.max_height_val_sbx.setSingleStep(.1)
+        self.max_height_val_sbx.setButtonSymbols(
+            QtWidgets.QAbstractSpinBox.PlusMinus)
+        self.max_height_val_sbx.setFixedWidth(70)
+        self.max_height_val_sbx.setFixedHeight(30)
+        self.max_height_val_sbx.setValue(self.scatterT.max_height_value)
+
+        self.max_height_lbl = QtWidgets.QLabel("Max:")
+        self.max_height_lbl.setStyleSheet("font: Bold 13px")
+        self.max_height_lbl.setFixedWidth(35)
+
+        self.min_height_space = QtWidgets.QLabel(" ")
+        self.min_height_space.setFixedWidth(50)
+        self.min_height_space.setFixedHeight(5)
+        self.min_height_space.setStyleSheet("font: 5px")
 
     def density_val_ui(self):
         """Specify density value to scatter"""
@@ -465,13 +495,16 @@ class ScatterUI(QtWidgets.QDialog):
         self.density_lbl.setIndent(9)
 
         self.dens_val_space = QtWidgets.QLabel(" ")
-        self.dens_val_space.setStyleSheet("font: 5px")
+        self.dens_val_space.setFixedWidth(10)
+        self.dens_val_space.setFixedHeight(5)
 
         layout = QtWidgets.QVBoxLayout()
 
         layout.addWidget(self.dens_val_space, 0, 0)
         layout.addWidget(self.density_lbl, 1, 0)
-        layout.addWidget(self.density_val_sbx, 1, 1)
+        layout.addWidget(self.dens_val_space, 2, 0)
+        layout.addWidget(self.density_val_sbx, 3, 1)
+        layout.addWidget(self.dens_val_space, 4, 0)
 
         return layout
 
@@ -496,7 +529,7 @@ class Scatter(object):
         self.scl_max_z = 5
 
         self.min_height_value = 0.0
-        self.max_height_value = 0.0
+        self.max_height_value = 10.0
 
         self.density_value = 100
 
