@@ -2,6 +2,7 @@ import maya.OpenMayaUI as omui
 import maya.cmds as cmds
 import maya.mel as mel
 import maya.OpenMaya as om
+import pymel.core as pm
 import random
 from PySide2 import QtWidgets, QtGui, QtCore
 from shiboken2 import wrapInstance
@@ -191,10 +192,6 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatter_tool.min_height_value = self.min_height_val_sbx.value()
         self.scatter_tool.max_height_value = self.max_height_val_sbx.value()
         self.scatter_tool.scatter_height_obj()
-
-    @QtCore.Slot()
-    def scatter_density_object(self):
-        self.scatter_tool.scatter_density_obj()
 
     @QtCore.Slot()
     def update_normal_bool(self):
@@ -495,7 +492,6 @@ class ScatterUI(QtWidgets.QDialog):
     def density_val_ui(self):
         """Specify density value to scatter"""
         self.density_val_sbx = QtWidgets.QDoubleSpinBox()
-
         self.density_val_sbx.setDecimals(0)
         self.density_val_sbx.setSingleStep(1)
         self.density_val_sbx.setMaximum(100)
@@ -504,11 +500,10 @@ class ScatterUI(QtWidgets.QDialog):
 
         self.density_val_sbx.setFixedWidth(75)
         self.density_val_sbx.setFixedHeight(40)
-        self.density_val_sbx.setValue(self.scatter_tool.density_value)
+        self.density_val_sbx.setValue(100)
 
         self.density_lbl = QtWidgets.QLabel("Value (%):")
         self.density_lbl.setStyleSheet("font: Bold 15px")
-        #self.density_lbl.setIndent(9)
 
         self.dens_val_space = QtWidgets.QLabel(" ")
         self.dens_val_space.setFixedWidth(10)
@@ -563,7 +558,7 @@ class Scatter(object):
 
         self.normal_bool = False
 
-        self.density_value = 100
+        self.density_value = 1.0
 
     def scatter_obj(self):
         """scatter the selected object"""
