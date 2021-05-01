@@ -20,8 +20,8 @@ class ScatterUI(QtWidgets.QDialog):
         """Constructor"""
         super(ScatterUI, self).__init__(parent=maya_main_window())
         self.setWindowTitle("Scatter Tool Window")
-        self.setFixedWidth(575)
-        self.setFixedHeight(790)
+        #self.setFixedWidth(575)
+        #self.setFixedHeight(790)
         self.setWindowFlags(self.windowFlags() ^
                             QtCore.Qt.WindowContextHelpButtonHint)
         self.scatter_tool = Scatter()
@@ -57,11 +57,15 @@ class ScatterUI(QtWidgets.QDialog):
             "Set percentage to scatter")
         self.scatter_note_density_lbl.setStyleSheet("font: Bold 12px")
 
+        self.scatter_normal_lbl = QtWidgets.QLabel("Face Normal")
+        self.scatter_normal_lbl.setStyleSheet("font: Bold 10px")
+
         self.sct_cnl_lay = self.cancel_lay_ui()
         self.rnd_rotation_lay = self.randomize_rotate_ui()
         self.rnd_scale_lay = self.randomize_scale_ui()
         self.rnd_height_lay = self.height_val_ui()
         self.density_lay = self.density_val_ui()
+        self.normal_lay = self.normal_bool_ui()
         self.main_layout_ui()
 
     def main_layout_ui(self):
@@ -84,6 +88,9 @@ class ScatterUI(QtWidgets.QDialog):
         self.main_lay.addWidget(self.scatter_note_density_lbl)
         self.main_lay.addLayout(self.density_lay)
 
+        self.main_lay.addWidget(self.scatter_normal_lbl)
+        self.main_lay.addLayout(self.normal_lay)
+
         self.main_lay.addStretch()
         self.main_lay.addLayout(self.sct_cnl_lay)
         self.setLayout(self.main_lay)
@@ -98,6 +105,7 @@ class ScatterUI(QtWidgets.QDialog):
         self.scatter_height_connections()
         self.height_btn.clicked.connect(self.scatter_height_object)
         self.scatter_density_connections()
+        self.scatter_normal_connections()
 
     def scatter_scl_connections(self):
         self.min_x_scl_sbx.valueChanged.connect(self.update_scl_min_x)
@@ -124,6 +132,9 @@ class ScatterUI(QtWidgets.QDialog):
     def scatter_density_connections(self):
         self.density_val_sbx.valueChanged.connect(
             self.update_density_value)
+
+    def scatter_normal_connections(self):
+        self.normal_bool_cbx.stateChanged.connect(self.update_normal_bool)
 
     def update_rot_min_x(self):
         self.scatter_tool.rot_min_x = self.min_x_rot_sbx.value()
@@ -191,6 +202,10 @@ class ScatterUI(QtWidgets.QDialog):
     @QtCore.Slot()
     def scatter_density_object(self):
         self.scatter_tool.scatter_density_obj()
+
+    @QtCore.Slot()
+    def update_normal_bool(self):
+        self.scatter_tool.normal_bool = self.normal_bool_cbx.isChecked()
 
     @QtCore.Slot()
     def cancel(self):
@@ -517,6 +532,17 @@ class ScatterUI(QtWidgets.QDialog):
 
         return layout
 
+    def normal_bool_ui(self):
+        """Check box for face normal scatter"""
+        self.normal_lbl = QtWidgets.QLabel("Face Normal")
+        self.normal_bool_cbx = QtWidgets.QCheckBox()
+
+        layout = QtWidgets.QGridLayout()
+
+        layout.addWidget(self.normal_lbl, 0, 0)
+        layout.addWidget(self.normal_bool_cbx, 0, 1)
+
+        return layout
 
 class Scatter(object):
 
@@ -539,6 +565,8 @@ class Scatter(object):
 
         self.min_height_value = 0.0
         self.max_height_value = 10.0
+
+        self.normal_bool = False
 
         self.density_value = 100
 
