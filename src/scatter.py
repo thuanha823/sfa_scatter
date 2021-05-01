@@ -20,8 +20,8 @@ class ScatterUI(QtWidgets.QDialog):
         """Constructor"""
         super(ScatterUI, self).__init__(parent=maya_main_window())
         self.setWindowTitle("Scatter Tool Window")
-        #self.setFixedWidth(575)
-        #self.setFixedHeight(790)
+        self.setFixedWidth(550)
+        self.setFixedHeight(770)
         self.setWindowFlags(self.windowFlags() ^
                             QtCore.Qt.WindowContextHelpButtonHint)
         self.scatter_tool = Scatter()
@@ -57,15 +57,11 @@ class ScatterUI(QtWidgets.QDialog):
             "Set percentage to scatter")
         self.scatter_note_density_lbl.setStyleSheet("font: Bold 12px")
 
-        self.scatter_normal_lbl = QtWidgets.QLabel("Face Normal")
-        self.scatter_normal_lbl.setStyleSheet("font: Bold 10px")
-
         self.sct_cnl_lay = self.cancel_lay_ui()
         self.rnd_rotation_lay = self.randomize_rotate_ui()
         self.rnd_scale_lay = self.randomize_scale_ui()
         self.rnd_height_lay = self.height_val_ui()
         self.density_lay = self.density_val_ui()
-        self.normal_lay = self.normal_bool_ui()
         self.main_layout_ui()
 
     def main_layout_ui(self):
@@ -87,9 +83,6 @@ class ScatterUI(QtWidgets.QDialog):
         self.main_lay.addWidget(self.scatter_density_lbl)
         self.main_lay.addWidget(self.scatter_note_density_lbl)
         self.main_lay.addLayout(self.density_lay)
-
-        self.main_lay.addWidget(self.scatter_normal_lbl)
-        self.main_lay.addLayout(self.normal_lay)
 
         self.main_lay.addStretch()
         self.main_lay.addLayout(self.sct_cnl_lay)
@@ -447,7 +440,7 @@ class ScatterUI(QtWidgets.QDialog):
         self.height_lbl = QtWidgets.QPushButton("Height offset")
         self.height_value()
         self.height_btn = QtWidgets.QPushButton("Height Offset")
-        self.height_btn.setStyleSheet("font: Bold 14px")
+        self.height_btn.setStyleSheet("font: Bold, 14px")
         self.height_btn.setFixedWidth(120)
         self.height_btn.setFixedHeight(40)
 
@@ -501,7 +494,6 @@ class ScatterUI(QtWidgets.QDialog):
 
     def density_val_ui(self):
         """Specify density value to scatter"""
-        self.density_lbl = QtWidgets.QPushButton("Density Percentage")
         self.density_val_sbx = QtWidgets.QDoubleSpinBox()
 
         self.density_val_sbx.setDecimals(0)
@@ -514,35 +506,38 @@ class ScatterUI(QtWidgets.QDialog):
         self.density_val_sbx.setFixedHeight(40)
         self.density_val_sbx.setValue(self.scatter_tool.density_value)
 
-        self.density_lbl = QtWidgets.QLabel("Value (%)")
-        self.density_lbl.setStyleSheet("font: Bold, 15px")
-        self.density_lbl.setIndent(9)
+        self.density_lbl = QtWidgets.QLabel("Value (%):")
+        self.density_lbl.setStyleSheet("font: Bold 15px")
+        #self.density_lbl.setIndent(9)
 
         self.dens_val_space = QtWidgets.QLabel(" ")
         self.dens_val_space.setFixedWidth(10)
         self.dens_val_space.setFixedHeight(5)
 
-        layout = QtWidgets.QVBoxLayout()
-
-        layout.addWidget(self.dens_val_space, 0, 0)
-        layout.addWidget(self.density_lbl, 1, 0)
-        layout.addWidget(self.dens_val_space, 2, 0)
-        layout.addWidget(self.density_val_sbx, 3, 1)
-        layout.addWidget(self.dens_val_space, 4, 0)
-
-        return layout
-
-    def normal_bool_ui(self):
-        """Check box for face normal scatter"""
-        self.normal_lbl = QtWidgets.QLabel("Face Normal")
+        """Scatter normal label"""
+        self.normal_lbl = QtWidgets.QLabel("Face Normal:")
+        self.normal_lbl.setStyleSheet("font: Bold 15px")
         self.normal_bool_cbx = QtWidgets.QCheckBox()
 
         layout = QtWidgets.QGridLayout()
 
-        layout.addWidget(self.normal_lbl, 0, 0)
-        layout.addWidget(self.normal_bool_cbx, 0, 1)
+        layout.addWidget(self.dens_val_space, 0, 0)
+        layout.addWidget(self.dens_val_space, 1, 0)
+        layout.addWidget(self.density_lbl, 1, 1)
+        layout.addWidget(self.dens_val_space, 1, 2)
+        layout.addWidget(self.density_val_sbx, 1, 3)
+        layout.addWidget(self.dens_val_space, 1, 4)
+        layout.addWidget(self.dens_val_space, 1, 5)
+
+        layout.addWidget(self.normal_lbl, 1, 6)
+        layout.addWidget(self.dens_val_space, 1, 7)
+        layout.addWidget(self.normal_bool_cbx, 1, 8)
+        layout.addWidget(self.dens_val_space, 1, 9)
+
+        layout.addWidget(self.dens_val_space, 2, 0)
 
         return layout
+
 
 class Scatter(object):
 
