@@ -569,17 +569,16 @@ class Scatter(object):
         scatter_grp = cmds.group(n='scatter_grp', a=False)
         object_to_instance = vert_list[0]
         if cmds.objectType(object_to_instance) == 'transform':
-            for vert in den_list:
-                vertex_pos = cmds.xform(vert, q=True, ws=True, t=True)
-                new_instance = cmds.instance(object_to_instance, n='obj_inst')
-                cmds.move(vertex_pos[0], vertex_pos[1], vertex_pos[2],
-                          new_instance)
-
+                if not self.normal_bool:
+                    self.object_y(den_list, object_to_instance)
+                else:
+                    self.object_normal(den_list, object_to_instance)
+        self.object_instance_rename()
         cmds.delete(vert_list[0])
 
     def scatter_rotate_obj(self):
         """Scatter the object with randomize rotation offset"""
-        obj_list = cmds.ls('obj_inst*', dag=1)
+        obj_list = cmds.ls(dag=1, sl=True)
         for obj in obj_list:
             rand_rot_x = random.uniform(self.rot_min_x,
                                         self.rot_max_x)
@@ -594,7 +593,7 @@ class Scatter(object):
 
     def scatter_scale_obj(self):
         """Scatter the object with randomize scale"""
-        obj_list = cmds.ls('obj_inst*', fl=True, dag=1)
+        obj_list = cmds.ls(fl=True, dag=1, sl=True)
         for obj in obj_list:
             rand_scl_x = random.uniform(self.scl_min_x,
                                         self.scl_max_x)
@@ -615,3 +614,40 @@ class Scatter(object):
                                          self.max_height_value)
             cmds.xform(obj, translation=[0.0, rnd_height, 0.0],
                        objectSpace=True, relative=True)
+
+    def object_instance_rename(self):
+        """rename instances in the group"""
+        ls_obj_inst = cmds.ls('obj_inst*')
+        scatter_grp = cmds.group(em=True, n='scatter_grp')
+        cmds.parent('obj_inst*', scatter_grp)
+        for obj in ls_obj_inst:
+            cmds.rename(obj, "group_" + "inst_obj" +
+                        str(ls_obj_inst.index(obj)))
+
+    def object_y(self, den_list, object_to_instance):
+        """scatter inst face up"""
+        for vert in den_list:
+            vertex_pos = cmds.xform(vert, q=True, ws=True,
+                                    t=True)
+            new_instance = cmds.instance(object_to_instance, n='obj_inst')
+            cmds.move(vertex_pos[0], vertex_pos[1], vertex_pos[2],
+                      new_instance)
+
+    def object_normal(self, den_list, object_to_instance):
+        """scatter inst face normal"""
+        for vert in den_list:
+            mesh_vert = pm.MeshVertex(vert)
+            vert_normal = mesh_vert.getNormal()
+            up_vector = pm.dt.Vector(0.0, 1.0, 0.0)
+            tangent = vert_normal.cross(up_vector).normal()
+            tangent2 = vert_normal.cross(tangent).normal()
+            pos = cmds.xform([vert], q=True, ws=True, t=True)
+
+            matrix_trans = [tangent2.x, tangent2.y, tangent2.z, 0.0,
+                            vert_normal.x, vert_normal.y, vert_normal.z,
+                            0.0,
+                            tangent.x, tangent.y, tangent.z, 0.0,
+                            pos[0], pos[1], pos[2], 1.0]
+
+            new_instance = cmds.instance(object_to_instance, n='obj_inst')
+            cmds.xform(new_instance, ws=True, matrix=matrix_trans)
